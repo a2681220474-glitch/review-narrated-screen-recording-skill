@@ -1,0 +1,38 @@
+name: Test skill
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  prepare-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Check CLI
+        run: python3 skills/review-narrated-screen-recording/scripts/prepare_review.py --help
+      - name: Generate test recording
+        run: |
+          ffmpeg -loglevel error -y \
+            -f lavfi -i testsrc=size=360x640:rate=10:duration=3 \
+            -f lavfi -i sine=frequency=1000:duration=3 \
+            -shortest -c:v libx264 -pix_fmt yuv420p -c:a aac \
+            /tmp/narrated-review-test.mp4
+      - name: Run evidence preparation
+        run: |
+          python3 skills/review-narrated-screen-recording/scripts/prepare_review.py \
+            /tmp/narrated-review-test.mp4 \
+            --output /tmp/narrated-review-output \
+            --interval 1
+      - name: Verify outputs
+        run: |
+          test -f /tmp/narrated-review-output/audio-16k.wav
+          test -f /tmp/narrated-review-output/frames/frame_000001.jpg
+          test -f /tmp/narrated-review-output/sheets/sheet_0001.jpg
+          test -f /tmp/narrated-review-output/frame-manifest.json
+          test -f /tmp/narrated-review-output/review-summary.json

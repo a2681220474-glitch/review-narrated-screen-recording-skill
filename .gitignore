@@ -1,0 +1,9 @@
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+review-output/
+*.wav
+*.mp4
+*.mov
+ggml-*.bin

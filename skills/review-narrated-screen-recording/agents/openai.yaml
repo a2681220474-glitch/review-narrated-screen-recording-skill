@@ -1,0 +1,4 @@
+interface:
+  display_name: "录屏验收复核"
+  short_description: "将录屏画面与口述逐秒对齐，整理成可确认的问题点和修改清单"
+  default_prompt: "Use $review-narrated-screen-recording to review this narrated screen recording and list every confirmed issue by timestamp."
