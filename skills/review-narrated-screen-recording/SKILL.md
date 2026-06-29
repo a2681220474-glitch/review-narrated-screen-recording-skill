@@ -24,6 +24,7 @@ Identify:
 
 - source video path
 - product or repository, when available
+- recording surface: desktop, mobile, tablet, simulator, remote desktop, or unknown
 - requested review scope
 - output directory
 - whether the user wants review only or implementation after confirmation
@@ -44,6 +45,8 @@ python3 scripts/prepare_review.py /absolute/path/video.mov \
   --model /absolute/path/ggml-small.bin \
   --prompt "产品名、页面名和功能名"
 ```
+
+Use a one-second interval for general page review. Use `--interval 0.25` or `0.5` when pointer movement, taps, gestures, hover states, or short transitions are important.
 
 The script creates:
 
@@ -81,6 +84,8 @@ Inspect every contact sheet in order. Around each spoken change, problem, questi
 4. Reject frames that are blank, mid-transition, obscured, or unrelated.
 5. Capture a better exact frame when the sampled frame is insufficient.
 
+Read [references/platform-evidence.md](references/platform-evidence.md) and apply the matching desktop, mobile, or hybrid rules. Record whether the action is evidenced by a visible mouse pointer, hover/focus state, click indicator, touch indicator, state transition, keyboard action, or gesture. Do not invent an exact click or tap position when the recording does not show it.
+
 Do not infer a requested change from a visual difference alone. Place unspoken visual issues in a separate optional section labeled `Visible but not spoken`.
 
 ### 5. Cross-Check The Current Product
@@ -104,6 +109,7 @@ Create one checklist item per independent user intent. Merge repeated comments a
 Each item must contain:
 
 - timestamp range
+- recording surface and input method
 - page or flow
 - concise spoken intent
 - visible evidence
@@ -148,6 +154,7 @@ Before handing off the checklist, verify:
 - The full audio was transcribed or a named blocker was reported.
 - Every transcript segment with actionable intent was accounted for.
 - Every change item has visual evidence from the matching time range.
+- Desktop pointer evidence and mobile touch/gesture evidence were interpreted with the correct platform rules.
 - Approvals and retractions were not accidentally converted into tasks.
 - Repeated comments were deduplicated without losing distinct actions.
 - Code status was checked only when code was available.

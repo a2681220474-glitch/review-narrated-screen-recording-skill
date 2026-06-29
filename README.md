@@ -10,6 +10,7 @@
 - 按指定间隔抓取关键帧
 - 生成带时间戳的联系表
 - 将字幕片段映射到附近的完整画面
+- 区分电脑端鼠标、悬停与键盘操作，以及手机端点击、滑动和手势证据
 - 区分修改要求、问题、认可、撤回、提问和普通操作说明
 - 识别“哦，这个没事”等后续撤回，避免生成错误任务
 - 在提供代码仓库时核对页面、事件、路由和权限实现
@@ -31,7 +32,7 @@ skills/review-narrated-screen-recording/
 克隆仓库后，将 Skill 复制到 Codex 的个人技能目录：
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/a2681220474-glitch/review-narrated-screen-recording-skill.git
 cp -R review-narrated-screen-recording-skill/skills/review-narrated-screen-recording ~/.codex/skills/
 ```
 
@@ -90,6 +91,13 @@ python3 skills/review-narrated-screen-recording/scripts/prepare_review.py \
 3. 后说的话可以推翻前面的判断。
 4. 画面中看见但用户没有提到的问题，必须单独标注，不能混入确认清单。
 5. 确认清单是后续修改的实施合同；明确说“不改”的项目必须保留。
+
+### 电脑端与手机端
+
+- 电脑端结合鼠标指针、悬停、按下、焦点、右键菜单、键盘和操作后的状态变化判断目标。
+- 手机端优先使用触摸指示；未显示手指时，通过点击前后的页面变化推断目标，并明确标记为推断。
+- 手机滑动、长按、返回手势和软键盘必须通过连续帧判断，不能把动画或网络延迟误认为另一次操作。
+- 模拟器、投屏和带触控板的平板分别记录“界面类型”和“输入方式”，避免简单归类。
 
 ## 测试
 

@@ -9,6 +9,7 @@ Baseline: <commit/state>. Product files modified: no.
 
 1. **<page and issue> | 需改**
    - Time: 00:12-00:24
+   - Surface/input: mobile / inferred tap
    - Spoken intent: <clean paraphrase>
    - Visible evidence: <what the matching frames show>
    - Current state: <missing/present but wrong/partial/already satisfied>
@@ -40,6 +41,9 @@ For each actionable point, preserve a machine-readable or Markdown note containi
 
 - `start`
 - `end`
+- `surface`
+- `input_method`
+- `interaction_indicator`
 - `transcript_raw`
 - `transcript_clean`
 - `intent_type`
