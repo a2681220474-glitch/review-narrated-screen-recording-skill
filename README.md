@@ -1,6 +1,6 @@
 # Narrated Screen Recording Review Skill
 
-一个面向 Codex 的开源 Skill：把“边操作、边口述问题”的验收录屏转换成带时间戳、画面证据和代码状态的确认清单。
+一个面向 Codex 的开源 Skill：把“边操作、边口述问题”的验收录屏转换成带时间戳和画面证据的确认清单。
 
 它解决的核心问题不是单纯抽帧或转写，而是把声音中的真实意图与当时屏幕上的页面、控件和操作结果准确对齐。
 
@@ -13,8 +13,7 @@
 - 区分电脑端鼠标、悬停与键盘操作，以及手机端点击、滑动和手势证据
 - 区分修改要求、问题、认可、撤回、提问和普通操作说明
 - 识别“哦，这个没事”等后续撤回，避免生成错误任务
-- 在提供代码仓库时核对页面、事件、路由和权限实现
-- 在用户确认前保持分析模式，不修改产品代码
+- 始终保持录屏分析模式，不执行代码修改或其他产品操作
 - 输出可按编号确认的验收清单
 
 ## 目录
@@ -24,6 +23,7 @@ skills/review-narrated-screen-recording/
 ├── SKILL.md
 ├── agents/openai.yaml
 ├── references/checklist-format.md
+├── references/platform-evidence.md
 └── scripts/prepare_review.py
 ```
 
@@ -41,7 +41,7 @@ cp -R review-narrated-screen-recording-skill/skills/review-narrated-screen-recor
 ```text
 使用 $review-narrated-screen-recording 复核这个录屏：
 /absolute/path/to/video.mov
-先根据声音和画面列出确认清单，不修改代码。
+只根据声音和画面列出确认清单，不执行其他操作。
 ```
 
 ## 本地工具
@@ -90,7 +90,7 @@ python3 skills/review-narrated-screen-recording/scripts/prepare_review.py \
 2. 必须完整阅读转写，不能只按关键词抓问题。
 3. 后说的话可以推翻前面的判断。
 4. 画面中看见但用户没有提到的问题，必须单独标注，不能混入确认清单。
-5. 确认清单是后续修改的实施合同；明确说“不改”的项目必须保留。
+5. 输出只负责准确还原录屏反馈；明确说“不改”的项目必须保留。
 
 ### 电脑端与手机端
 

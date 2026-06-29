@@ -3,7 +3,7 @@
 Use this compact structure. Keep the main checklist readable; place deeper audit notes in the evidence directory.
 
 ```markdown
-Baseline: <commit/state>. Product files modified: no.
+Source: <recording path>. Evidence preparation: complete or named blocker.
 
 ## 待确认清单
 
@@ -12,7 +12,7 @@ Baseline: <commit/state>. Product files modified: no.
    - Surface/input: mobile / inferred tap
    - Spoken intent: <clean paraphrase>
    - Visible evidence: <what the matching frames show>
-   - Current state: <missing/present but wrong/partial/already satisfied>
+   - Visible state: <what the recording shows before and after the interaction>
    - Proposed action: <bounded change>
    - Confidence: high
 
@@ -29,9 +29,9 @@ Evidence: <transcript path> | <timeline path> | <screenshots folder>
 
 ## Health Labels
 
-- `需改`: clear requested change that is not currently satisfied
+- `需改`: clear requested change that is not visibly satisfied in the recording
 - `部分完成`: capability exists but does not fully satisfy the spoken requirement
-- `已满足`: current product already matches the request
+- `已满足`: the visible state already matches the spoken requirement
 - `不改`: speaker explicitly approved, withdrew, or deferred the point
 - `待确认`: the desired action or destination cannot be derived safely
 
@@ -49,7 +49,6 @@ For each actionable point, preserve a machine-readable or Markdown note containi
 - `intent_type`
 - `page`
 - `frame_paths`
-- `code_paths`
 - `status`
 - `confidence`
 - `reasoning_limit`

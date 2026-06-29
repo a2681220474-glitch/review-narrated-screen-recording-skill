@@ -1,6 +1,6 @@
 ---
 name: review-narrated-screen-recording
-description: Review narrated screen recordings by extracting audio, transcribing speech, sampling frames, aligning spoken feedback with the visible product state, optionally checking the current code, and producing a timestamped confirmation checklist before implementation. Use for screen-recording acceptance reviews, QA videos, UX walkthroughs, bug-report videos, or requests such as "我边录屏边说问题", "把视频里的问题列出来", "对齐画面和声音", and "先核对再修改".
+description: Review narrated screen recordings by extracting audio, transcribing speech, sampling frames, aligning spoken feedback with visible screen states and interaction evidence, and producing a timestamped confirmation checklist. Use for screen-recording acceptance reviews, QA videos, UX walkthroughs, bug-report videos, or requests such as "我边录屏边说问题", "把视频里的问题列出来", "对齐画面和声音", and "先核对再修改".
 ---
 
 # Review Narrated Screen Recording
@@ -9,8 +9,9 @@ Turn a screen recording with spoken commentary into a reliable, evidence-linked 
 
 ## Operating Contract
 
-- Default to analysis only. Do not edit product files until the user confirms the checklist or explicitly asks for immediate implementation.
+- Stay in analysis mode. Produce evidence and a checklist; do not perform implementation or unrelated product work.
 - Use the supplied recording from the current request as evidence. Do not substitute old screenshots or prior audit conclusions.
+- Keep findings limited to evidence available in the recording and its transcript.
 - Preserve timestamps throughout extraction, transcription, inspection, and reporting.
 - Distinguish requested changes from observations, questions, approvals, retractions, and narration.
 - Let later speech override earlier speech. For example, "这个搜索添加是……哦，没事" means no change.
@@ -18,18 +19,16 @@ Turn a screen recording with spoken commentary into a reliable, evidence-linked 
 
 ## Workflow
 
-### 1. Establish The Baseline
+### 1. Establish Review Context
 
 Identify:
 
 - source video path
-- product or repository, when available
 - recording surface: desktop, mobile, tablet, simulator, remote desktop, or unknown
 - requested review scope
 - output directory
-- whether the user wants review only or implementation after confirmation
 
-Use a local temporary output directory by default, such as `/private/tmp/narrated-review-<video-stem>`. If a repository is involved, record `git status --short` and the current commit before analysis. Do not clean or revert unrelated work.
+Use a local temporary output directory by default, such as `/private/tmp/narrated-review-<video-stem>`.
 
 ### 2. Prepare Evidence
 
@@ -88,21 +87,7 @@ Read [references/platform-evidence.md](references/platform-evidence.md) and appl
 
 Do not infer a requested change from a visual difference alone. Place unspoken visual issues in a separate optional section labeled `Visible but not spoken`.
 
-### 5. Cross-Check The Current Product
-
-When source code is available, locate the visible text, handler, route, state, and permission check. Mark each spoken point as:
-
-- `missing`
-- `present but wrong`
-- `partially complete`
-- `already satisfied`
-- `not verifiable from code read`
-
-For permission-sensitive features, check both entry visibility and server-side authorization. A hidden button without backend enforcement is incomplete; a protected endpoint with a publicly claimable admin role may also be incomplete.
-
-Do not edit files during this step.
-
-### 6. Consolidate Spoken Points
+### 5. Consolidate Spoken Points
 
 Create one checklist item per independent user intent. Merge repeated comments about the same behavior. Preserve separate items when the desired actions differ.
 
@@ -113,7 +98,6 @@ Each item must contain:
 - page or flow
 - concise spoken intent
 - visible evidence
-- current implementation state, when code was checked
 - proposed action
 - confidence: high, medium, or low
 - status: `需改`, `部分完成`, `已满足`, `不改`, or `待确认`
@@ -128,24 +112,20 @@ Apply these rules:
 
 Use [references/checklist-format.md](references/checklist-format.md) for the final structure.
 
-### 7. Ask For Confirmation
+### 6. Ask For Confirmation
 
-Return the checklist before implementation. Lead with the baseline state and clearly say that no product files were modified.
+Return the checklist after reviewing the complete recording. Lead with the source recording and evidence status.
 
 Include:
 
-- confirmed change items
-- partial or already-complete items
+- spoken change and problem items
+- visibly satisfied or partially satisfied items
 - explicit no-change items
 - ambiguous items requiring confirmation
 - transcript and evidence folder paths
 - evidence limitations
 
 Do not ask the user to repeat feedback already recoverable from the recording.
-
-### 8. Implement Only After Confirmation
-
-When the user confirms, treat the confirmed checklist as the implementation contract. Preserve deferred and no-change items. After implementation, verify each confirmed item against the original timestamped evidence and report any remaining mismatch.
 
 ## Quality Gates
 
@@ -157,6 +137,4 @@ Before handing off the checklist, verify:
 - Desktop pointer evidence and mobile touch/gesture evidence were interpreted with the correct platform rules.
 - Approvals and retractions were not accidentally converted into tasks.
 - Repeated comments were deduplicated without losing distinct actions.
-- Code status was checked only when code was available.
-- No product files were changed during review-only mode.
 - The user can approve items by number without rereading the whole transcript.
